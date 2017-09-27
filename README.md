@@ -20,4 +20,4 @@ cleaner.exe test.sqf -v
 
 ## Authors
 
-* **LyeedoO** - [PurpleBooth](https://github.com/LyeedoO)
+* **LyeedoO** - [LyeedoO](https://github.com/LyeedoO)
