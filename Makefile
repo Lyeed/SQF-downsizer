@@ -1,10 +1,12 @@
-NAME=		sqf_cleaner
+NAME=		downsize
 
 OBJ=		$(SRC:.cpp=.o)
 
-SRC=		main.cpp
+SRC=		main.cpp \
+			src/trim.cpp \
+			src/downsize.cpp
 
-CPPFLAGS=	-std=c++11
+CPPFLAGS=	-Iincludes -W -Wall -Wextra -Werror -Werror-implicit-function-declaration -Wparentheses -Wreturn-type -Wuninitialized -std=c++17
 
 all:		$(NAME)
 

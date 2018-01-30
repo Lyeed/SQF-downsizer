@@ -1,23 +1,23 @@
-# Edaly_Script_Cleaner
+# Edaly_ArmA_Downsize
 
 ## Usage
 
-### Syntax
+### Parameters
 
 ```
-cleaner.exe [file] [options]
+1 : source file
+2 : destination file
 ```
 
 ### Options
-Available options :
--v (verbose)
+None
 
 ### Exemple
 
 ```
-cleaner.exe test.sqf -v
+downsize.exe ./test_files/config.hpp my_new_config.hpp
 ```
 
-## Authors
+## Author
 
 * **LyeedoO** - [LyeedoO](https://github.com/LyeedoO)
