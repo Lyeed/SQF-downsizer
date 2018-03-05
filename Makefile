@@ -6,7 +6,8 @@ SRC=		main.cpp \
 			src/trim.cpp \
 			src/downsize.cpp
 
-CPPFLAGS=	-Iincludes -W -Wall -Wextra -Werror -Werror-implicit-function-declaration -Wparentheses -Wreturn-type -Wuninitialized -std=c++17
+CPPFLAGS=	-Iincludes -std=c++17
+# CPPFLAGS=	-Iincludes -W -Wall -Wextra -Werror -Werror-implicit-function-declaration -Wparentheses -Wreturn-type -Wuninitialized -std=c++17
 
 all:		$(NAME)
 
