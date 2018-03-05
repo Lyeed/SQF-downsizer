@@ -20,8 +20,9 @@ None
 ### Exemple
 
 ```
-downsize.exe ./tests/initFunctions.sqf ./tests/new_initFunctions.sqf
-downsize.exe ./tests/initFunctions.sqf ./tests/initFunctions.sqf
+downsize.exe ./tests/initPlayerLocal.sqf ./tests/new_initPlayerLocal.sqf
+downsize.exe ./tests/initPlayerLocal.sqf test.sqf
+downsize.exe ./tests/initPlayerLocal.sqf ./tests/initPlayerLocal.sqf
 ```
 
 ## Author
