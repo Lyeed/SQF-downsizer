@@ -1,4 +1,4 @@
-# Edaly_ArmA_Downsize
+# SQF downsizer
 
 ## Usage
 
@@ -15,7 +15,7 @@ None
 ### Exemple
 
 ```
-downsize.exe ./test_files/config.hpp my_new_config.hpp
+downsize.exe file_to_read new_file
 ```
 
 ## Author

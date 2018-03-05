@@ -11,7 +11,7 @@ CPPFLAGS=	-Iincludes -W -Wall -Wextra -Werror -Werror-implicit-function-declarat
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-			g++ -o $(NAME) $(OBJ) $(LIB)
+			g++ -o $(NAME) $(OBJ)
 
 clean:
 			rm -f $(OBJ)
