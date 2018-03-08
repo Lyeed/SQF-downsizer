@@ -1,58 +1,52 @@
 #include "downsize.hpp"
 #include "trim.hpp"
 
-int downsize(const std::string f_input, const std::string f_output)
+static std::map<std::string, std::string> dic_map = {
+    {", ", ","},
+    {" >", ">"},{"> ", ">"},
+    {" < ", "<"}, {"<  ", "<"},
+    {" = ", "="},
+    {" != ", "!="},
+    {" || ", "||"},
+    {" && ", "&&"},
+    {" (", "("},
+    {") ", ")"},
+    {" -", "-"},{"- ", "-"},
+    {" +", "+"},{"+ ", "+"},
+    {" then ", "then"},{" then", "then"},
+    {"waitUntil ", "waitUntil"},
+    {" {", "{"},{"} ", "}"},
+    {" exitWith ", "exitWith"},{" exitWith", "exitWith"},
+    {": ", ":"},
+    {"\n", ""},
+    {"\r", ""},
+    {"\t", ""}
+};
+
+static std::string downsize_line(std::string line)
 {
-    std::ifstream r_file(f_input, std::ios::out);
-    if (!r_file.is_open())
+    static bool header = false;
+    static bool first_header = false;
+    std::string s_trim = trim(line);
+    if (s_trim.find("/*") != std::string::npos)
     {
-        std::cout << "Error: File " << f_input << "does not exist" << std::endl;
-        return EXIT_FAILURE;
-    }
-    if ((f_input.find(".sqf") == std::string::npos) && (f_input.find(".hpp") == std::string::npos) && (f_input.find(".ext") == std::string::npos))
-    {
-        std::cout << "Error: File extension is not supported" << std::endl;
-        r_file.close();
-        return EXIT_FAILURE;
-    }
-
-    std::map<std::string, std::string> dic_map = {
-        {", ", ","},
-        {" > ", ">"},{" < ", "<"},
-        {" = ", "="},
-        {" != ", "!="},
-        {" || ", "||"},
-        {" && ", "&&"},
-        {"if (", "if("},
-        {" - ", "-"},
-        {" +", "+"},{"+ ", "+"},
-        {" then ", "then"},{" then", "then"},
-        {"waitUntil ", "waitUntil"},
-        {" {", "{"},{"} ", "}"},
-        {" exitWith ", "exitWith"},{" exitWith", "exitWith"},
-        {": ", ":"},
-        {"\n", ""},
-        {"\r", ""},
-        {"\t", ""}
-    };
-
-    std::string line;
-    std::vector<std::string> content;
-    bool header = false;
-    while (getline(r_file, line))
-    {
-        const std::string s_trim = trim(line);
-
-        if (s_trim[0] == '/' && s_trim[1] == '*') {
-            header = true;
-        } else if (s_trim[0] == '*' && s_trim[1] == '/') {
-            header = false;
-            line = line + '\n';
+        if (first_header) {
+            line = '\n'+ line;            
         }
-
+        if (s_trim.find("*/") == std::string::npos) {
+            header = true;
+        }
+        first_header = true;
+    } else if ((s_trim.find("*/") != std::string::npos) && header) {            
+        header = false;
+        line = line + '\n';
+    } else if ((s_trim.find("//") != std::string::npos) || (s_trim[0] == '#')) {
+        line = line + '\n';
+    } else {
         if (header) {
             line = line + '\n';
-        } else if (s_trim[0] != '*' && s_trim[1] != '/' && s_trim[1] != '#') {
+        } else {
+            line = s_trim;
             size_t pos;
             unsigned int deletion = 0;
             std::vector<size_t> positions;
@@ -69,23 +63,18 @@ int downsize(const std::string f_input, const std::string f_output)
                 while (pos != std::string::npos)
                 {
                     bool removed = false;
-                    // std::cout << "--------------------------------" << std::endl;
-                    // std::cout << x.first << " | position :" << pos << std::endl;
                     bool in_string = false;
                     for (unsigned int a = 0 ; a < positions.size() ; ++a)
                     {
                         if ((positions[a] - deletion) > pos)
                         {
-                            // std::cout << "next string found :" << positions[a] - deletion << std::endl;
                             if ((a % 2) == 1) {
-                                // std::cout << "is in string" << std::endl;
                                 in_string = true;
                             }
                             break;
                         }
                     }
 
-                    // std::cout << "before : [" << line << "]" << std::endl;
                     if (!in_string)
                     {
                         if (x.second.empty())
@@ -97,19 +86,33 @@ int downsize(const std::string f_input, const std::string f_output)
                             line.replace(pos, x.first.length(), x.second);
                         }
                     }
-                    // std::cout << "after : [" << line << "]" << std::endl;
-                    // std::cout << "remove count : " << deletion << std::endl;
 
                     pos = line.find(x.first, removed ? pos : pos + 1);
                 }
             }
         }
+    }
+    return line;
+}
 
-        if (!(line[0] == '/' && !header)) {
-            content.push_back(line);
-        }
+int downsize(const std::string f_input, const std::string f_output)
+{
+    std::ifstream r_file(f_input, std::ios::out);
+    if (!r_file.is_open()) {
+        std::cout << "Error: File " << f_input << " does not exist" << std::endl;
+        return EXIT_FAILURE;
+    }
+    if ((f_input.find(".sqf") == std::string::npos) && (f_input.find(".hpp") == std::string::npos) && (f_input.find(".ext") == std::string::npos)) {
+        std::cout << "Error: File extension is not supported" << std::endl;
+        r_file.close();
+        return EXIT_FAILURE;
     }
 
+    std::string line;
+    std::vector<std::string> content;
+    while (getline(r_file, line)) {
+        content.push_back(downsize_line(line));
+    }
     r_file.close();
 
     std::ofstream w_file(f_output, std::ios::in | std::ios::trunc);

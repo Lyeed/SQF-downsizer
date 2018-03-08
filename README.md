@@ -1,7 +1,6 @@
 # SQF downsizer
 
 ## Build
-
 Use make to build the executable
 
 ## Usage
@@ -20,9 +19,9 @@ None
 ### Exemple
 
 ```
-downsize.exe ./tests/initPlayerLocal.sqf ./tests/new_initPlayerLocal.sqf
-downsize.exe ./tests/initPlayerLocal.sqf test.sqf
-downsize.exe ./tests/initPlayerLocal.sqf ./tests/initPlayerLocal.sqf
+downsize.exe ./tests/initFunctions.sqf ./tests/new_initFunctions.sqf
+downsize.exe ./tests/initFunctions.sqf test.sqf
+downsize.exe ./tests/initFunctions.sqf ./tests/initFunctions.sqf
 ```
 
 ## Author

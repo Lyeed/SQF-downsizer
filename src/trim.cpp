@@ -1,18 +1,24 @@
 #include "trim.hpp"
 
-std::string trim_left(const std::string &str)
-{
-    const std::string pattern = " \f\t\v";
-    return str.substr(str.find_first_not_of(pattern));
-}
-
-std::string trim_right(const std::string &str)
-{
-    const std::string pattern = " \f\t\v";
-    return str.substr(0,str.find_last_not_of(pattern) + 1);
-}
-
 std::string trim(const std::string &str)
 {
-    return trim_left(trim_right(str));
+	const std::string pattern = " \t\f\v\n\r";
+	std::string ret = str;
+	std::size_t found;
+
+	found = ret.find_last_not_of(pattern);
+	if (found == std::string::npos) {
+		ret.clear();
+	} else {
+		ret.erase(found + 1, ret.length() - found);
+	}
+
+	found = ret.find_first_not_of(pattern);
+	if (found == std::string::npos) {
+		ret.clear();
+	} else {
+		ret.erase(0, found);
+	}
+
+    return ret;
 }
