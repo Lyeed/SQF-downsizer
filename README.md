@@ -1,7 +1,7 @@
 # SQF downsizer
 
 ## Build
-Use make to build the executable
+Use cmake to build
 
 ## Usage
 
@@ -16,7 +16,7 @@ downsize.exe file_to_read new_file
 ### Options
 None
 
-### Exemple
+### Exemples
 
 ```
 downsize.exe ./tests/initFunctions.sqf ./tests/new_initFunctions.sqf

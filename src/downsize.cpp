@@ -102,7 +102,12 @@ int downsize(const std::string f_input, const std::string f_output)
         std::cout << "Error: File " << f_input << " does not exist" << std::endl;
         return EXIT_FAILURE;
     }
-    if ((f_input.find(".sqf") == std::string::npos) && (f_input.find(".hpp") == std::string::npos) && (f_input.find(".ext") == std::string::npos)) {
+    if (
+            (f_input.find(".sqf") == std::string::npos) &&
+            (f_input.find(".hpp") == std::string::npos) &&
+            (f_input.find(".ext") == std::string::npos) &&
+            (f_input.find(".cpp") == std::string::npos)
+        ) {
         std::cout << "Error: File extension is not supported" << std::endl;
         r_file.close();
         return EXIT_FAILURE;
