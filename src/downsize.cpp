@@ -23,13 +23,11 @@ static std::map<std::string, std::string> dic_map = {
     {"\t", ""}
 };
 
-static std::string downsize_line(std::string line)
-{
+static std::string downsize_line(std::string line) {
     static bool header = false;
     static bool first_header = false;
     std::string s_trim = trim(line);
-    if (s_trim.find("/*") != std::string::npos)
-    {
+    if (s_trim.find("/*") != std::string::npos) {
         if (first_header) {
             line = '\n'+ line;            
         }
@@ -51,21 +49,17 @@ static std::string downsize_line(std::string line)
             unsigned int deletion = 0;
             std::vector<size_t> positions;
             pos = line.find("\"", 0);
-            while (pos != std::string::npos)
-            {
+            while (pos != std::string::npos) {
                 positions.push_back(pos);
                 pos = line.find("\"", pos + 1);
             }
 
-            for (auto const &x : dic_map)
-            {
+            for (auto const &x : dic_map) {
                 pos = line.find(x.first, 0);
-                while (pos != std::string::npos)
-                {
+                while (pos != std::string::npos) {
                     bool removed = false;
                     bool in_string = false;
-                    for (unsigned int a = 0 ; a < positions.size() ; ++a)
-                    {
+                    for (unsigned int a = 0 ; a < positions.size() ; ++a) {
                         if ((positions[a] - deletion) > pos)
                         {
                             if ((a % 2) == 1) {
@@ -75,10 +69,8 @@ static std::string downsize_line(std::string line)
                         }
                     }
 
-                    if (!in_string)
-                    {
-                        if (x.second.empty())
-                        {
+                    if (!in_string) {
+                        if (x.second.empty()) {
                             line.erase(pos, 1);
                             deletion++;
                             removed = true;
@@ -95,8 +87,7 @@ static std::string downsize_line(std::string line)
     return line;
 }
 
-int downsize(const std::string f_input, const std::string f_output)
-{
+int downsize(const std::string f_input, const std::string f_output) {
     std::ifstream r_file(f_input, std::ios::out);
     if (!r_file.is_open()) {
         std::cout << "Error: File " << f_input << " does not exist" << std::endl;

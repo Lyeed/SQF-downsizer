@@ -1,8 +1,5 @@
 # SQF downsizer
 
-## Build
-Use cmake to build
-
 ## Usage
 
 ### Parameters
