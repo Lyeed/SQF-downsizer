@@ -1,5 +1,84 @@
-// testfile
+/*
+	MissionDefault, NoEndings etc. are arbitrary class names. MissionDefault is Bohemia standard name for missions parent class.
+	Left to itself, simply inheriting the mission default means you will exit the game at the end of mission/chapter (and will be done on last(s) mission(s).
+	An end that is used but not defined (e.g "end6") will crash the game.
+*/
+class NoEndings
+{
+	end1 = ;
+	end2 = ;
+	end3 = ;
+	end4 = ;
+	end5 = ;
+	end6 = ;
+	lost = ;
+};
 
-// test1
+class MissionDefault : NoEndings
+{ 
+	lives		= -1; // this sets your "lives" to none - old OFP setting where you would lose a "life" every time you retried the mission, never used
+	noAward		=  1; // TBD
+	cutscene	= ;   // mandatory definition
+};
 
-// test2
+weaponPool = 1;
+
+class Campaign
+{
+ 	name		= "My Great Campaign"; // before Arma 3
+ 	briefingName	= "My Great Campaign"; // since Arma 3
+	firstBattle	= Chapter1;
+
+	class Chapter1 : NoEndings
+	{
+		firstMission = Chapter1_Mission1;
+		end1 = Chapter2; // other endings are defined by inheritance from NoEndings
+
+		class Chapter1_Mission1 : MissionDefault
+		{
+			end1 = Chapter1_Mission2; // other endings are defined by inheritance from MissionDefault, inheriting from NoEndings
+			end2 = ; // end2 will end Chapter 1, therefore going to Chapter 2
+			template = C1M1.VR;
+		};
+		class Chapter1_Mission2 : MissionDefault
+		{
+			end1 = ; // not defining the ending will use the Chapter ending corresponding to end1: Chapter2 here
+
+			template = C1M2.VR;
+		};
+	};
+
+	class Chapter2 : NoEndings
+	{
+		firstMission = Chapter2_Mission1;
+		end1 = LastChapter;
+
+		// this mission is named Chapter2_Mission1 for clarity purpose,
+		// but both Chapter1_Mission1 and Chapter2_Mission1 could have been named Mission1 as game engine respects Chapter hierarchy.
+		// do not, however, name two missions the same in the same chapter
+		class Chapter2_Mission1 : MissionDefault
+		{
+			end1 = ; // not defining the ending will use the Chapter ending corresponding to end1: LastChapter here
+
+			template = C2M1.VR;
+		};
+	};
+
+	class LastChapter : NoEndings
+	{
+		firstMission = Chapter3_Mission1;
+		// no endings provided: because of NoEndings inheritence this is the same as writing
+		// end1 = ;
+		// end2 = ;
+		// end3 = ;
+		// end4 = ;
+		// end5 = ;
+		// end6 = ;
+		// lost = ;
+		class Chapter3_Mission1
+		{
+			// not defining the ending will use the Chapter ending corresponding to end1: NOTHING here, closing the campaign
+			template = C3M1.VR;
+		};
+	};
+};
